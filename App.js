@@ -10,6 +10,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const algoritma = require('./algoritma')
 app.post("/uhui/aha", algoritma);
 
+app.get('/', (req, res) => {
+  res.send('Halo api antares :)')
+})
+
 server.listen(80, function () {
   console.log("App on port 80");
 });

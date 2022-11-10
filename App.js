@@ -11,7 +11,7 @@ const algoritma = require('./algoritma')
 app.post("/uhui/aha", algoritma);
 
 app.get('/', (req, res) => {
-  res.send('Halo api antares :)')
+  res.send("Halo api antares :)")
 })
 
 server.listen(process.env.PORT || 80, function () {

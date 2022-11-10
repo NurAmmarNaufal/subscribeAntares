@@ -14,6 +14,6 @@ app.get('/', (req, res) => {
   res.send('Halo api antares :)')
 })
 
-server.listen(80, function () {
+server.listen(process.env.PORT || 80, function () {
   console.log("App on port 80");
 });

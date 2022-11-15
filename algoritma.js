@@ -74,6 +74,14 @@ const algoritma = async (req, res) => {
             Date.now()
           ]
         );
+        axios({
+          method: 'post',
+          url: 'http://api.siagaairbersih.com/v1/device/katara/',
+          data: {
+            flow: volume,
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOjIxM30.iI0d6yHJzUpX4Tj0STqkiN14Xzy2BEdG3npkLga9XO8'
+          }
+        });
       }
       console.log('data < 36')
     }

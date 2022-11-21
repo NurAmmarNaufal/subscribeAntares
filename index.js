@@ -14,6 +14,11 @@ app.post("/uhui/aha", algoritma);
 const db = require('./cekdb')
 app.get("/uhui/db/", db);
 
+const link = require('./link')
+app.get("/uhui/link/:ulala", link);
+
+// const ifTodayDate1 = require('./controller/ifTodayDate1')
+
 app.get('/', (req, res) => {
   res.json("Halo 👋, ini API lora antares SIAB :)")
 })

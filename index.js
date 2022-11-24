@@ -11,11 +11,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const algoritma = require('./algoritma')
 app.post("/uhui/aha", algoritma);
 
+const algo = require('./algo')
+app.post("/uhui/ulala", algo);
+
 const db = require('./cekdb')
 app.get("/uhui/db/", db);
 
-const link = require('./link')
-app.get("/uhui/link/:ulala", link);
 
 // const ifTodayDate1 = require('./controller/ifTodayDate1')
 

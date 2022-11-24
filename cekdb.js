@@ -1,40 +1,65 @@
 const pool = require("./config/db");
 
 async function db(req, res) {
-  const date = new Date();
-  let mon = date.getMonth() + 1;
-  let mon2 = mon - 1
-  let year = date.getFullYear()
+  let date = new Date();
+  let mon = date.getMonth();
+  let mon2 = mon - 1;
+  let year = date.getFullYear();
 
-  if (mon === 1) {
-    mon2 = mon
-    mon = 12
-    year = year - 1
-  } 
+  let devEuiLora = "8cf9572000092ac1";
 
-  let devEui = '8cf95720000939bc'
-  const identitas = await (await pool.query(`SELECT * FROM identitas_lora WHERE deveui = '${devEui}'`)).rows[0];
-  
-  let pg = await (await pool.query(
-    `
-      SELECT bulan, max(volume) as last FROM (
-        SELECT * FROM data_lora WHERE bulan = ${mon} AND tahun = '${year}' AND deveui = '${devEui}'
-        UNION
-        SELECT * FROM data_lora WHERE bulan = ${mon2} AND tahun = '${year}' AND deveui = '${devEui}'
-      ) as new
-      GROUP BY bulan 
-      ORDER BY last DESC
-    `
-  )).rows;
+  const cekDataBulanS = (
+    await pool.query(
+      `SELECT bulan FROM data_lora WHERE bulan = ${mon} AND deveui = '${devEuiLora}' LIMIT 1`
+    )
+  ).rows;
 
-  let result = parseInt(pg[0].last) - parseInt(pg[1].last)
+  console.log(cekDataBulanS)
+
+  const cekDataBulanSS = (
+    await pool.query(
+      `SELECT bulan FROM data_lora WHERE bulan = ${mon2} AND deveui = '${devEuiLora}'`
+    )
+  ).rows[0];
+
+  let query = "";
+  let a = "";
+  if (cekDataBulanSS) {
+    a = 'data 1'
+    query = `
+            SELECT bulan, max(volume) as last FROM (
+              SELECT * FROM data_lora WHERE bulan = ${mon} AND tahun = '${year}' AND deveui = '${devEuiLora}'
+              UNION
+              SELECT * FROM data_lora WHERE bulan = ${mon2} AND tahun = '${year}' AND deveui = '${devEuiLora}'
+            ) as new
+            GROUP BY bulan 
+            ORDER BY last DESC
+          `
+  }else{
+    a = 'data2'
+    query = `
+            SELECT bulan, max(volume) as last FROM (
+              SELECT * FROM data_lora WHERE bulan = ${mon} AND tahun = '${year}' AND deveui = '${devEuiLora}'
+            ) as new
+            GROUP BY bulan 
+            ORDER BY last DESC
+          `
+  }
+  const cekDataBulan = (await pool.query(query)).rows;
+
+
   let data = {
-    dat: pg,
-    iden: identitas,
-    result: result
-  } 
+    data1: cekDataBulan,
+    a: a
+  };
 
-  res.status(200).json(data);
+  if (cekDataBulanS.length !== 0) {
+    console.log('aha')
+  }else{
+    console.log('ih')
+  }
+
+  res.status(200).json(cekDataBulanS.length);
 }
 
 module.exports = db;
